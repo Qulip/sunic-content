@@ -1,0 +1,13 @@
+pluginManagement {
+	repositories {
+		maven { url = 'https://repo.spring.io/snapshot' }
+		gradlePluginPortal()
+	}
+}
+rootProject.name = 'content-service'
+
+include 'content-spec'
+include 'content-aggregate'
+include 'content-rest'
+include 'content-client'
+include 'content-boot'

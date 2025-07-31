@@ -1,0 +1,91 @@
+spring:
+  application:
+    name: content-service
+  profiles:
+    active: local
+    
+  datasource:
+    url: jdbc:mysql://localhost:3306/sunic
+    username: mysuni
+    password: mysuni
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+        use_sql_comments: false
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+  jwt:
+    secretKey: Y2hsZGtkdWRyaGsgZGJkbGZybmpzZG1sIHRqZG5mY2hzc2hhIGR1Z29kZG1zIHJQdGhyZWhsc2VrLiBka3ZkbWZoZWggclB0aHI=
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+# Content Service Client Configuration
+content-service:
+  base-url: http://localhost:8080
+  timeout: 30
+
+# Resilience4j Circuit Breaker Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      content-service:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+
+logging:
+  level:
+    com.sunic.content: INFO
+
+---
+# Profile-specific configurations
+spring:
+  config:
+    activate:
+      on-profile: local
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    com.sunic.content: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    com.sunic.content: WARN
