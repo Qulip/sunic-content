@@ -33,21 +33,7 @@ public class LectureLogic implements LectureFacade {
     @Override
     @Transactional
     public Integer createLecture(LectureCreateSdo createSdo) {
-        Lecture lecture = Lecture.builder()
-                .name(createSdo.getName())
-                .description(createSdo.getDescription())
-                .learningType(createSdo.getLearningType())
-                .difficulty(createSdo.getDifficulty())
-                .thumbnail(createSdo.getThumbnail())
-                .categoryId(createSdo.getCategoryId())
-                .lectureState(LectureState.Active)
-                .contentIds(List.of())
-                .registeredTime(System.currentTimeMillis())
-                .registrant(createSdo.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(createSdo.getRegistrant())
-                .build();
-        
+        Lecture lecture = Lecture.create(createSdo);
         Lecture saved = lectureStore.save(lecture);
         return saved.getId();
     }
@@ -84,23 +70,7 @@ public class LectureLogic implements LectureFacade {
     @Transactional
     public void modifyLecture(Integer id, LectureUpdateSdo updateSdo) {
         Lecture existingLecture = lectureStore.findById(id);
-        
-        Lecture updatedLecture = Lecture.builder()
-                .id(existingLecture.getId())
-                .name(updateSdo.getName() != null ? updateSdo.getName() : existingLecture.getName())
-                .description(updateSdo.getDescription() != null ? updateSdo.getDescription() : existingLecture.getDescription())
-                .learningType(updateSdo.getLearningType() != null ? updateSdo.getLearningType() : existingLecture.getLearningType())
-                .difficulty(updateSdo.getDifficulty() != null ? updateSdo.getDifficulty() : existingLecture.getDifficulty())
-                .thumbnail(updateSdo.getThumbnail() != null ? updateSdo.getThumbnail() : existingLecture.getThumbnail())
-                .lectureState(updateSdo.getLectureState() != null ? updateSdo.getLectureState() : existingLecture.getLectureState())
-                .categoryId(updateSdo.getCategoryId() != null ? updateSdo.getCategoryId() : existingLecture.getCategoryId())
-                .contentIds(existingLecture.getContentIds())
-                .registeredTime(existingLecture.getRegisteredTime())
-                .registrant(existingLecture.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(updateSdo.getModifier())
-                .build();
-        
+        Lecture updatedLecture = existingLecture.modify(updateSdo);
         lectureStore.save(updatedLecture);
     }
     
@@ -108,23 +78,7 @@ public class LectureLogic implements LectureFacade {
     @Transactional
     public void deleteLecture(Integer id) {
         Lecture lecture = lectureStore.findById(id);
-        
-        Lecture updatedLecture = Lecture.builder()
-                .id(lecture.getId())
-                .name(lecture.getName())
-                .description(lecture.getDescription())
-                .learningType(lecture.getLearningType())
-                .difficulty(lecture.getDifficulty())
-                .thumbnail(lecture.getThumbnail())
-                .lectureState(LectureState.Inactive)
-                .categoryId(lecture.getCategoryId())
-                .contentIds(lecture.getContentIds())
-                .registeredTime(lecture.getRegisteredTime())
-                .registrant(lecture.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(lecture.getModifier())
-                .build();
-        
+        Lecture updatedLecture = lecture.deactivate();
         lectureStore.save(updatedLecture);
     }
     

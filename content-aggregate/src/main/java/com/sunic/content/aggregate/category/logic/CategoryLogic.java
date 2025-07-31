@@ -29,15 +29,7 @@ public class CategoryLogic implements CategoryFacade {
     @Override
     @Transactional
     public Integer createCategory(CategoryCreateSdo createSdo) {
-        Category category = Category.builder()
-                .name(createSdo.getName())
-                .description(createSdo.getDescription())
-                .registeredTime(System.currentTimeMillis())
-                .registrant(createSdo.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(createSdo.getRegistrant())
-                .build();
-        
+        Category category = Category.create(createSdo);
         Category saved = categoryStore.save(category);
         return saved.getId();
     }
@@ -59,18 +51,7 @@ public class CategoryLogic implements CategoryFacade {
     @Transactional
     public void modifyCategory(Integer id, CategoryUpdateSdo updateSdo) {
         Category existingCategory = categoryStore.findById(id);
-        
-        Category updatedCategory = Category.builder()
-                .id(existingCategory.getId())
-                .name(updateSdo.getName() != null ? updateSdo.getName() : existingCategory.getName())
-                .description(updateSdo.getDescription() != null ? updateSdo.getDescription() : existingCategory.getDescription())
-                .lectureIds(existingCategory.getLectureIds())
-                .registeredTime(existingCategory.getRegisteredTime())
-                .registrant(existingCategory.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(updateSdo.getModifier())
-                .build();
-        
+        Category updatedCategory = existingCategory.modify(updateSdo);
         categoryStore.save(updatedCategory);
     }
     

@@ -28,19 +28,7 @@ public class ContentLogic implements ContentFacade {
     @Override
     @Transactional
     public String registerContent(ContentCreateSdo createSdo) {
-        Content content = Content.builder()
-                .name(createSdo.getName())
-                .description(createSdo.getDescription())
-                .url(createSdo.getUrl())
-                .contentType(createSdo.getContentType())
-                .contentState(ContentState.Active)
-                .lectureId(createSdo.getLectureId())
-                .registeredTime(System.currentTimeMillis())
-                .registrant(createSdo.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(createSdo.getRegistrant())
-                .build();
-        
+        Content content = Content.create(createSdo);
         Content saved = contentStore.save(content);
         return saved.getId().toString();
     }
@@ -62,21 +50,7 @@ public class ContentLogic implements ContentFacade {
     @Transactional
     public void modifyContent(Integer id, ContentUpdateSdo updateSdo) {
         Content existingContent = contentStore.findById(id);
-        
-        Content updatedContent = Content.builder()
-                .id(existingContent.getId())
-                .name(updateSdo.getName() != null ? updateSdo.getName() : existingContent.getName())
-                .description(updateSdo.getDescription() != null ? updateSdo.getDescription() : existingContent.getDescription())
-                .url(updateSdo.getUrl() != null ? updateSdo.getUrl() : existingContent.getUrl())
-                .contentType(updateSdo.getContentType() != null ? updateSdo.getContentType() : existingContent.getContentType())
-                .contentState(updateSdo.getContentState() != null ? updateSdo.getContentState() : existingContent.getContentState())
-                .lectureId(updateSdo.getLectureId() != null ? updateSdo.getLectureId() : existingContent.getLectureId())
-                .registeredTime(existingContent.getRegisteredTime())
-                .registrant(existingContent.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(updateSdo.getModifier())
-                .build();
-        
+        Content updatedContent = existingContent.modify(updateSdo);
         contentStore.save(updatedContent);
     }
     
@@ -84,21 +58,7 @@ public class ContentLogic implements ContentFacade {
     @Transactional
     public void deleteContent(Integer id) {
         Content content = contentStore.findById(id);
-        
-        Content updatedContent = Content.builder()
-                .id(content.getId())
-                .name(content.getName())
-                .description(content.getDescription())
-                .url(content.getUrl())
-                .contentType(content.getContentType())
-                .contentState(ContentState.Deleted)
-                .lectureId(content.getLectureId())
-                .registeredTime(content.getRegisteredTime())
-                .registrant(content.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())  
-                .modifier(content.getModifier())
-                .build();
-        
+        Content updatedContent = content.delete();
         contentStore.save(updatedContent);
     }
 
