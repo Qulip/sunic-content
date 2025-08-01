@@ -1,10 +1,10 @@
 package com.sunic.content.spec.category.facade.sdo;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.List;
 
 /**
  * Response Data Object for category.
@@ -14,12 +14,12 @@ import java.util.List;
 @Builder
 @ToString
 public class CategoryRdo {
-    private final Integer id;
-    private final String name;
-    private final String description;
-    private final List<Integer> lectureIds;
-    private final Long registeredTime;
-    private final Integer registrant;
-    private final Long modifiedTime;
-    private final Integer modifier;
+	private final Integer id;
+	private final String name;
+	private final String description;
+	private final List<Integer> lectureIds;
+	private final Long registeredTime;
+	private final Integer registrant;
+	private final Long modifiedTime;
+	private final Integer modifier;
 }

@@ -11,8 +11,8 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class CategoryCreateSdo {
-    private final String name;
-    private final String description;
-    private final Integer registrant;
+public class CategoryCdo {
+	private final String name;
+	private final String description;
+	private final Integer registrant;
 }

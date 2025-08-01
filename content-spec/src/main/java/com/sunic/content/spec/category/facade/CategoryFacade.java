@@ -1,39 +1,35 @@
 package com.sunic.content.spec.category.facade;
 
-import com.sunic.content.spec.category.facade.sdo.CategoryCreateSdo;
-import com.sunic.content.spec.category.facade.sdo.CategoryRdo;
-import com.sunic.content.spec.category.facade.sdo.CategoryUpdateSdo;
-
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
+import com.sunic.content.spec.category.facade.sdo.CategoryCdo;
+import com.sunic.content.spec.category.facade.sdo.CategoryRdo;
+import com.sunic.content.spec.category.facade.sdo.CategoryUdo;
+import com.sunic.content.spec.common.ApiResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
- * Category domain facade interface defining business operations contracts.
- * This follows the modularization-strategy.md pattern for service interfaces.
+ * API documentation interface for Category operations.
  */
+@Tag(name = "Category", description = "Category API")
 public interface CategoryFacade {
-    
-    /**
-     * Creates a new category
-     */
-    Integer createCategory(CategoryCreateSdo createSdo);
-    
-    /**
-     * Retrieves a category by ID
-     */
-    CategoryRdo retrieveCategory(Integer id);
-    
-    /**
-     * Retrieves all categories
-     */
-    List<CategoryRdo> retrieveAllCategories();
-    
-    /**
-     * Modifies an existing category
-     */
-    void modifyCategory(Integer id, CategoryUpdateSdo updateSdo);
-    
-    /**
-     * Deletes a category
-     */
-    void deleteCategory(Integer id);
+
+	@Operation(summary = "Create category", description = "Create a new category")
+	ResponseEntity<ApiResponse<Integer>> createCategory(CategoryCdo request);
+
+	@Operation(summary = "Get category", description = "Get category by ID")
+	ResponseEntity<ApiResponse<CategoryRdo>> getCategory(Integer id);
+
+	@Operation(summary = "Get all categories", description = "Get all categories")
+	ResponseEntity<ApiResponse<List<CategoryRdo>>> getAllCategories();
+
+	@Operation(summary = "Update category", description = "Update category information")
+	ResponseEntity<ApiResponse<Void>> updateCategory(Integer id, CategoryUdo request);
+
+	@Operation(summary = "Delete category", description = "Delete category by ID")
+	ResponseEntity<ApiResponse<Void>> deleteCategory(Integer id);
 }

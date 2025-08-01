@@ -7,20 +7,16 @@ import lombok.Builder;
 import lombok.Getter;
 
 /**
- * Result Data Object for Content retrieval operations.
+ * Service Data Object for updating Content.
  */
 @Getter
 @Builder
-public class ContentRdo {
-	private final Integer id;
+public class ContentUdo {
 	private final String name;
 	private final String description;
 	private final String url;
 	private final ContentType contentType;
 	private final ContentState contentState;
 	private final Integer lectureId;
-	private final Long registeredTime;
-	private final Integer registrant;
-	private final Long modifiedTime;
 	private final Integer modifier;
 }
