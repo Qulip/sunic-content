@@ -31,5 +31,5 @@ public interface CategoryFacade {
 	ResponseEntity<ApiResponse<Void>> updateCategory(Integer id, CategoryUdo request);
 
 	@Operation(summary = "Delete category", description = "Delete category by ID")
-	ResponseEntity<ApiResponse<Void>> deleteCategory(Integer id);
+	ResponseEntity<ApiResponse<Void>> deleteCategory(Integer id, Integer userId);
 }

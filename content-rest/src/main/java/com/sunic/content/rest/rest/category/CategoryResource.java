@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunic.content.aggregate.category.logic.CategoryLogic;
@@ -76,8 +77,10 @@ public class CategoryResource implements CategoryFacade {
 
 	@Override
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse<Void>> deleteCategory(@PathVariable Integer id) {
-		categoryLogic.deleteCategory(id);
+	public ResponseEntity<ApiResponse<Void>> deleteCategory(
+		@PathVariable Integer id,
+		@RequestParam Integer userId) {
+		categoryLogic.deleteCategory(id, userId);
 
 		return ResponseEntity.ok(
 			ApiResponse.success("Category deleted successfully")

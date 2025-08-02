@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunic.content.spec.common.ApiResponse;
@@ -70,8 +71,10 @@ public class ContentResource {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse<Void>> deleteContent(@PathVariable Integer id) {
-		contentFacade.deleteContent(id);
+	public ResponseEntity<ApiResponse<Void>> deleteContent(
+		@PathVariable Integer id,
+		@RequestParam Integer userId) {
+		contentFacade.deleteContent(id, userId);
 
 		return ResponseEntity.ok(
 			ApiResponse.success("Content deleted successfully")

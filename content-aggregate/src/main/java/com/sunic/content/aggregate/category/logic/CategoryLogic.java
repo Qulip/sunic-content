@@ -7,11 +7,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunic.content.aggregate.category.store.CategoryStore;
+import com.sunic.content.aggregate.proxy.UserProxy;
 import com.sunic.content.spec.category.entity.Category;
 import com.sunic.content.spec.category.exception.CategoryHasLecturesException;
 import com.sunic.content.spec.category.facade.sdo.CategoryCdo;
 import com.sunic.content.spec.category.facade.sdo.CategoryRdo;
 import com.sunic.content.spec.category.facade.sdo.CategoryUdo;
+import com.sunic.content.spec.common.exception.AdminPermissionException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,9 +27,14 @@ import lombok.RequiredArgsConstructor;
 public class CategoryLogic {
 
 	private final CategoryStore categoryStore;
+	private final UserProxy userProxy;
 
 	@Transactional
 	public Integer createCategory(CategoryCdo createSdo) {
+		if (!userProxy.checkUserIsAdmin(createSdo.getRegistrant())) {
+			throw new AdminPermissionException(createSdo.getRegistrant());
+		}
+		
 		Category category = Category.create(createSdo);
 		Category saved = categoryStore.save(category);
 		return saved.getId();
@@ -46,13 +53,21 @@ public class CategoryLogic {
 
 	@Transactional
 	public void modifyCategory(Integer id, CategoryUdo updateSdo) {
+		if (!userProxy.checkUserIsAdmin(updateSdo.getModifier())) {
+			throw new AdminPermissionException(updateSdo.getModifier());
+		}
+		
 		Category existingCategory = categoryStore.findById(id);
 		Category updatedCategory = existingCategory.modify(updateSdo);
 		categoryStore.save(updatedCategory);
 	}
 
 	@Transactional
-	public void deleteCategory(Integer id) {
+	public void deleteCategory(Integer id, Integer userId) {
+		if (!userProxy.checkUserIsAdmin(userId)) {
+			throw new AdminPermissionException(userId);
+		}
+		
 		Category category = categoryStore.findById(id);
 
 		if (categoryStore.hasLectures(id)) {

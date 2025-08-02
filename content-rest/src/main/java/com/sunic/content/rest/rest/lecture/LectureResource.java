@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunic.content.aggregate.lecture.logic.LectureLogic;
@@ -82,8 +83,10 @@ public class LectureResource implements LectureFacade {
 
     @Override
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse<Void>> deleteLecture(@PathVariable Integer id) {
-		lectureLogic.deleteLecture(id);
+	public ResponseEntity<ApiResponse<Void>> deleteLecture(
+		@PathVariable Integer id,
+		@RequestParam Integer userId) {
+		lectureLogic.deleteLecture(id, userId);
 
 		return ResponseEntity.ok(
 			ApiResponse.success("Lecture deleted successfully")

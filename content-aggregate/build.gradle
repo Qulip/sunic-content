@@ -4,6 +4,9 @@ dependencies {
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework:spring-tx'
 
+    // WebClient for REST calls
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

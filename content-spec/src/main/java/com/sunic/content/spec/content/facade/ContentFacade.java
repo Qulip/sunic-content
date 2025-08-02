@@ -28,5 +28,5 @@ public interface ContentFacade {
 	void modifyContent(Integer id, ContentUdo updateSdo);
 
 	@Operation(summary = "Delete Content", description = "Delete content")
-	void deleteContent(Integer id);
+	void deleteContent(Integer id, Integer userId);
 }

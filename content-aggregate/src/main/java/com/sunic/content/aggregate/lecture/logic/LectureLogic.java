@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunic.content.aggregate.lecture.store.LectureStore;
+import com.sunic.content.aggregate.proxy.UserProxy;
+import com.sunic.content.spec.common.exception.AdminPermissionException;
 import com.sunic.content.spec.lecture.entity.Lecture;
 import com.sunic.content.spec.lecture.facade.LectureFacade;
 import com.sunic.content.spec.lecture.facade.sdo.LectureCdo;
@@ -30,9 +32,14 @@ import lombok.RequiredArgsConstructor;
 public class LectureLogic {
 
 	private final LectureStore lectureStore;
+	private final UserProxy userProxy;
 
 	@Transactional
 	public Integer createLecture(LectureCdo createSdo) {
+		if (!userProxy.checkUserIsAdmin(createSdo.getRegistrant())) {
+			throw new AdminPermissionException(createSdo.getRegistrant());
+		}
+		
 		Lecture lecture = Lecture.create(createSdo);
 		Lecture saved = lectureStore.save(lecture);
 		return saved.getId();
@@ -62,13 +69,21 @@ public class LectureLogic {
 
 	@Transactional
 	public void modifyLecture(Integer id, LectureUdo updateSdo) {
+		if (!userProxy.checkUserIsAdmin(updateSdo.getModifier())) {
+			throw new AdminPermissionException(updateSdo.getModifier());
+		}
+		
 		Lecture existingLecture = lectureStore.findById(id);
 		Lecture updatedLecture = existingLecture.modify(updateSdo);
 		lectureStore.save(updatedLecture);
 	}
 
 	@Transactional
-	public void deleteLecture(Integer id) {
+	public void deleteLecture(Integer id, Integer userId) {
+		if (!userProxy.checkUserIsAdmin(userId)) {
+			throw new AdminPermissionException(userId);
+		}
+		
 		Lecture lecture = lectureStore.findById(id);
 		Lecture updatedLecture = lecture.deactivate();
 		lectureStore.save(updatedLecture);

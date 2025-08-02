@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunic.content.aggregate.content.store.ContentStore;
+import com.sunic.content.aggregate.proxy.UserProxy;
+import com.sunic.content.spec.common.exception.AdminPermissionException;
 import com.sunic.content.spec.content.entity.Content;
 import com.sunic.content.spec.content.facade.ContentFacade;
 import com.sunic.content.spec.content.facade.sdo.ContentCdo;
@@ -25,10 +27,15 @@ import lombok.RequiredArgsConstructor;
 public class ContentLogic implements ContentFacade {
 
 	private final ContentStore contentStore;
+	private final UserProxy userProxy;
 
 	@Override
 	@Transactional
 	public String registerContent(ContentCdo contentCdo) {
+		if (!userProxy.checkUserIsAdmin(contentCdo.getRegistrant())) {
+			throw new AdminPermissionException(contentCdo.getRegistrant());
+		}
+		
 		Content content = Content.create(contentCdo);
 		Content saved = contentStore.save(content);
 		return saved.getId().toString();
@@ -50,6 +57,10 @@ public class ContentLogic implements ContentFacade {
 	@Override
 	@Transactional
 	public void modifyContent(Integer id, ContentUdo updateSdo) {
+		if (!userProxy.checkUserIsAdmin(updateSdo.getModifier())) {
+			throw new AdminPermissionException(updateSdo.getModifier());
+		}
+		
 		Content existingContent = contentStore.findById(id);
 		Content updatedContent = existingContent.modify(updateSdo);
 		contentStore.save(updatedContent);
@@ -57,7 +68,11 @@ public class ContentLogic implements ContentFacade {
 
 	@Override
 	@Transactional
-	public void deleteContent(Integer id) {
+	public void deleteContent(Integer id, Integer userId) {
+		if (!userProxy.checkUserIsAdmin(userId)) {
+			throw new AdminPermissionException(userId);
+		}
+		
 		Content content = contentStore.findById(id);
 		Content updatedContent = content.delete();
 		contentStore.save(updatedContent);

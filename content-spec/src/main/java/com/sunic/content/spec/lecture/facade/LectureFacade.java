@@ -31,5 +31,5 @@ public interface LectureFacade {
 	ResponseEntity<ApiResponse<List<LectureRdo>>> getAllLectures();
 	ResponseEntity<ApiResponse<List<LectureRdo>>> searchLectures(LectureQdo lectureQdo);
 	ResponseEntity<ApiResponse<Void>> updateLecture(Integer id, LectureUdo lectureUdo);
-	ResponseEntity<ApiResponse<Void>> deleteLecture(Integer id);
+	ResponseEntity<ApiResponse<Void>> deleteLecture(Integer id, Integer userId);
 }
