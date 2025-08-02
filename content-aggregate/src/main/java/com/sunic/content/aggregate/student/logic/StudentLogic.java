@@ -65,18 +65,11 @@ public class StudentLogic implements StudentFacade {
 	@Transactional
 	public void updateContentStudent(ContentStudentUdo contentStudentUdo) {
 		ContentStudent existingContentStudent = contentStudentStore.findById(contentStudentUdo.getId());
-		ContentStudent updatedContentStudent = existingContentStudent.modify(contentStudentUdo);
-		contentStudentStore.save(updatedContentStudent);
+		existingContentStudent.modify(contentStudentUdo);
+		contentStudentStore.save(existingContentStudent);
 	}
 
 	private LectureStudentRdo convertToLectureStudentRdo(LectureStudent lectureStudent) {
-		return LectureStudentRdo.builder()
-			.id(lectureStudent.getId())
-			.studentId(lectureStudent.getStudentId())
-			.lectureId(lectureStudent.getLectureId())
-			.contentStudents(lectureStudent.getContentStudents())
-			.registeredTime(lectureStudent.getRegisteredTime())
-			.modifiedTime(lectureStudent.getModifiedTime())
-			.build();
+		return lectureStudent.toRdo();
 	}
 }

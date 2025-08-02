@@ -62,8 +62,8 @@ public class ContentLogic implements ContentFacade {
 		}
 		
 		Content existingContent = contentStore.findById(id);
-		Content updatedContent = existingContent.modify(updateSdo);
-		contentStore.save(updatedContent);
+		existingContent.modify(updateSdo);
+		contentStore.save(existingContent);
 	}
 
 	@Override
@@ -74,23 +74,11 @@ public class ContentLogic implements ContentFacade {
 		}
 		
 		Content content = contentStore.findById(id);
-		Content updatedContent = content.delete();
-		contentStore.save(updatedContent);
+		content.delete();
+		contentStore.save(content);
 	}
 
 	private ContentRdo convertToContentRdo(Content content) {
-		return ContentRdo.builder()
-			.id(content.getId())
-			.name(content.getName())
-			.description(content.getDescription())
-			.url(content.getUrl())
-			.contentType(content.getContentType())
-			.contentState(content.getContentState())
-			.lectureId(content.getLectureId())
-			.registeredTime(content.getRegisteredTime())
-			.registrant(content.getRegistrant())
-			.modifiedTime(content.getModifiedTime())
-			.modifier(content.getModifier())
-			.build();
+		return content.toRdo();
 	}
 }

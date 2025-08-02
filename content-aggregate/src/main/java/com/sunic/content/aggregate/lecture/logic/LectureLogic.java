@@ -74,8 +74,8 @@ public class LectureLogic {
 		}
 		
 		Lecture existingLecture = lectureStore.findById(id);
-		Lecture updatedLecture = existingLecture.modify(updateSdo);
-		lectureStore.save(updatedLecture);
+		existingLecture.modify(updateSdo);
+		lectureStore.save(existingLecture);
 	}
 
 	@Transactional
@@ -85,25 +85,11 @@ public class LectureLogic {
 		}
 		
 		Lecture lecture = lectureStore.findById(id);
-		Lecture updatedLecture = lecture.deactivate();
-		lectureStore.save(updatedLecture);
+		lecture.deactivate();
+		lectureStore.save(lecture);
 	}
 
 	private LectureRdo convertToLectureRdo(Lecture lecture) {
-		return LectureRdo.builder()
-			.id(lecture.getId())
-			.name(lecture.getName())
-			.description(lecture.getDescription())
-			.learningType(lecture.getLearningType())
-			.difficulty(lecture.getDifficulty())
-			.thumbnail(lecture.getThumbnail())
-			.lectureState(lecture.getLectureState())
-			.categoryId(lecture.getCategoryId())
-			.contentIds(lecture.getContentIds())
-			.registeredTime(lecture.getRegisteredTime())
-			.registrant(lecture.getRegistrant())
-			.modifiedTime(lecture.getModifiedTime())
-			.modifier(lecture.getModifier())
-			.build();
+		return lecture.toRdo();
 	}
 }

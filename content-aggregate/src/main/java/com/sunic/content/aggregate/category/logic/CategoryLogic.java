@@ -58,8 +58,8 @@ public class CategoryLogic {
 		}
 		
 		Category existingCategory = categoryStore.findById(id);
-		Category updatedCategory = existingCategory.modify(updateSdo);
-		categoryStore.save(updatedCategory);
+		existingCategory.modify(updateSdo);
+		categoryStore.save(existingCategory);
 	}
 
 	@Transactional
@@ -78,15 +78,6 @@ public class CategoryLogic {
 	}
 
 	private CategoryRdo convertToCategoryRdo(Category category) {
-		return CategoryRdo.builder()
-			.id(category.getId())
-			.name(category.getName())
-			.description(category.getDescription())
-			.lectureIds(category.getLectureIds())
-			.registeredTime(category.getRegisteredTime())
-			.registrant(category.getRegistrant())
-			.modifiedTime(category.getModifiedTime())
-			.modifier(category.getModifier())
-			.build();
+		return category.toRdo();
 	}
 }

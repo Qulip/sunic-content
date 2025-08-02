@@ -4,32 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sunic.content.spec.lecture.facade.sdo.LectureCdo;
+import com.sunic.content.spec.lecture.facade.sdo.LectureRdo;
 import com.sunic.content.spec.lecture.facade.sdo.LectureUdo;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
  * Pure domain entity for Lecture without JPA annotations.
  */
 @Getter
+@Setter
 @Builder
 @ToString
 public class Lecture {
-	private final Integer id;
-	private final String name;
-	private final String description;
-	private final LearningType learningType;
-	private final LectureState lectureState;
-	private final String thumbnail;
-	private final Difficulty difficulty;
-	private final Integer categoryId;
-	private final List<Integer> contentIds;
-	private final Long registeredTime;
-	private final Integer registrant;
-	private final Long modifiedTime;
-	private final Integer modifier;
+	private Integer id;
+	private String name;
+	private String description;
+	private LearningType learningType;
+	private LectureState lectureState;
+	private String thumbnail;
+	private Difficulty difficulty;
+	private Integer categoryId;
+	private List<Integer> contentIds;
+	private Long registeredTime;
+	private Integer registrant;
+	private Long modifiedTime;
+	private Integer modifier;
 
 	public static Lecture create(LectureCdo createSdo) {
 		return Lecture.builder()
@@ -48,116 +51,78 @@ public class Lecture {
 			.build();
 	}
 
-	public Lecture modify(LectureUdo updateSdo) {
-		return Lecture.builder()
-			.id(this.id)
-			.name(updateSdo.getName() != null ? updateSdo.getName() : this.name)
-			.description(updateSdo.getDescription() != null ? updateSdo.getDescription() : this.description)
-			.learningType(updateSdo.getLearningType() != null ? updateSdo.getLearningType() : this.learningType)
-			.lectureState(updateSdo.getLectureState() != null ? updateSdo.getLectureState() : this.lectureState)
-			.thumbnail(updateSdo.getThumbnail() != null ? updateSdo.getThumbnail() : this.thumbnail)
-			.difficulty(updateSdo.getDifficulty() != null ? updateSdo.getDifficulty() : this.difficulty)
-			.categoryId(updateSdo.getCategoryId() != null ? updateSdo.getCategoryId() : this.categoryId)
-			.contentIds(this.contentIds)
-			.registeredTime(this.registeredTime)
-			.registrant(this.registrant)
-			.modifiedTime(System.currentTimeMillis())
-			.modifier(updateSdo.getModifier())
-			.build();
-	}
-
-	public Lecture addContent(Integer contentId) {
-		List<Integer> updatedContentIds = new ArrayList<>(this.contentIds);
-		if (!updatedContentIds.contains(contentId)) {
-			updatedContentIds.add(contentId);
+	public void modify(LectureUdo updateSdo) {
+		if (updateSdo.getName() != null) {
+			this.name = updateSdo.getName();
 		}
-		return Lecture.builder()
+		if (updateSdo.getDescription() != null) {
+			this.description = updateSdo.getDescription();
+		}
+		if (updateSdo.getLearningType() != null) {
+			this.learningType = updateSdo.getLearningType();
+		}
+		if (updateSdo.getLectureState() != null) {
+			this.lectureState = updateSdo.getLectureState();
+		}
+		if (updateSdo.getThumbnail() != null) {
+			this.thumbnail = updateSdo.getThumbnail();
+		}
+		if (updateSdo.getDifficulty() != null) {
+			this.difficulty = updateSdo.getDifficulty();
+		}
+		if (updateSdo.getCategoryId() != null) {
+			this.categoryId = updateSdo.getCategoryId();
+		}
+		this.modifiedTime = System.currentTimeMillis();
+		this.modifier = updateSdo.getModifier();
+	}
+
+	public void addContent(Integer contentId) {
+		if (this.contentIds == null) {
+			this.contentIds = new ArrayList<>();
+		}
+		if (!this.contentIds.contains(contentId)) {
+			this.contentIds.add(contentId);
+			this.modifiedTime = System.currentTimeMillis();
+		}
+	}
+
+	public void removeContent(Integer contentId) {
+		if (this.contentIds != null && this.contentIds.contains(contentId)) {
+			this.contentIds.remove(contentId);
+			this.modifiedTime = System.currentTimeMillis();
+		}
+	}
+
+	public void activate() {
+		this.lectureState = LectureState.Active;
+		this.modifiedTime = System.currentTimeMillis();
+	}
+
+	public void deactivate() {
+		this.lectureState = LectureState.Inactive;
+		this.modifiedTime = System.currentTimeMillis();
+	}
+
+	public void hide() {
+		this.lectureState = LectureState.Hide;
+		this.modifiedTime = System.currentTimeMillis();
+	}
+
+	public LectureRdo toRdo() {
+		return LectureRdo.builder()
 			.id(this.id)
 			.name(this.name)
 			.description(this.description)
 			.learningType(this.learningType)
+			.difficulty(this.difficulty)
+			.thumbnail(this.thumbnail)
 			.lectureState(this.lectureState)
-			.thumbnail(this.thumbnail)
-			.difficulty(this.difficulty)
-			.categoryId(this.categoryId)
-			.contentIds(updatedContentIds)
-			.registeredTime(this.registeredTime)
-			.registrant(this.registrant)
-			.modifiedTime(System.currentTimeMillis())
-			.modifier(this.modifier)
-			.build();
-	}
-
-	public Lecture removeContent(Integer contentId) {
-		List<Integer> updatedContentIds = new ArrayList<>(this.contentIds);
-		updatedContentIds.remove(contentId);
-		return Lecture.builder()
-			.id(this.id)
-			.name(this.name)
-			.description(this.description)
-			.learningType(this.learningType)
-			.lectureState(this.lectureState)
-			.thumbnail(this.thumbnail)
-			.difficulty(this.difficulty)
-			.categoryId(this.categoryId)
-			.contentIds(updatedContentIds)
-			.registeredTime(this.registeredTime)
-			.registrant(this.registrant)
-			.modifiedTime(System.currentTimeMillis())
-			.modifier(this.modifier)
-			.build();
-	}
-
-	public Lecture activate() {
-		return Lecture.builder()
-			.id(this.id)
-			.name(this.name)
-			.description(this.description)
-			.learningType(this.learningType)
-			.lectureState(LectureState.Active)
-			.thumbnail(this.thumbnail)
-			.difficulty(this.difficulty)
 			.categoryId(this.categoryId)
 			.contentIds(this.contentIds)
 			.registeredTime(this.registeredTime)
 			.registrant(this.registrant)
-			.modifiedTime(System.currentTimeMillis())
-			.modifier(this.modifier)
-			.build();
-	}
-
-	public Lecture deactivate() {
-		return Lecture.builder()
-			.id(this.id)
-			.name(this.name)
-			.description(this.description)
-			.learningType(this.learningType)
-			.lectureState(LectureState.Inactive)
-			.thumbnail(this.thumbnail)
-			.difficulty(this.difficulty)
-			.categoryId(this.categoryId)
-			.contentIds(this.contentIds)
-			.registeredTime(this.registeredTime)
-			.registrant(this.registrant)
-			.modifiedTime(System.currentTimeMillis())
-			.modifier(this.modifier)
-			.build();
-	}
-
-	public Lecture hide() {
-		return Lecture.builder()
-			.id(this.id)
-			.name(this.name)
-			.description(this.description)
-			.learningType(this.learningType)
-			.lectureState(LectureState.Hide)
-			.thumbnail(this.thumbnail)
-			.difficulty(this.difficulty)
-			.categoryId(this.categoryId)
-			.contentIds(this.contentIds)
-			.registeredTime(this.registeredTime)
-			.registrant(this.registrant)
-			.modifiedTime(System.currentTimeMillis())
+			.modifiedTime(this.modifiedTime)
 			.modifier(this.modifier)
 			.build();
 	}
