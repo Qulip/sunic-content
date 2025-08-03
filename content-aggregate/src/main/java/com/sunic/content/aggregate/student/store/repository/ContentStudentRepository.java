@@ -12,8 +12,8 @@ import com.sunic.content.aggregate.student.store.jpo.ContentStudentJpo;
  */
 @Repository
 public interface ContentStudentRepository extends JpaRepository<ContentStudentJpo, Integer> {
-	
+
 	List<ContentStudentJpo> findByStudentId(Integer studentId);
-	
+
 	List<ContentStudentJpo> findByContentId(Integer contentId);
 }

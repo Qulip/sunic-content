@@ -36,7 +36,7 @@ public class LectureResource implements LectureFacade {
 
 	private final LectureLogic lectureLogic;
 
-    @Override
+	@Override
 	@PostMapping("/")
 	public ResponseEntity<ApiResponse<Integer>> createLecture(
 		@Valid @RequestBody LectureCdo lectureCdo) {
@@ -44,7 +44,7 @@ public class LectureResource implements LectureFacade {
 			.body(ApiResponse.success("Lecture created successfully", lectureLogic.createLecture(lectureCdo)));
 	}
 
-    @Override
+	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse<LectureRdo>> getLecture(@PathVariable Integer id) {
 		return ResponseEntity.ok(
@@ -52,7 +52,7 @@ public class LectureResource implements LectureFacade {
 		);
 	}
 
-    @Override
+	@Override
 	@GetMapping("/")
 	public ResponseEntity<ApiResponse<List<LectureRdo>>> getAllLectures() {
 		return ResponseEntity.ok(
@@ -60,7 +60,7 @@ public class LectureResource implements LectureFacade {
 		);
 	}
 
-    @Override
+	@Override
 	@PostMapping("/search")
 	public ResponseEntity<ApiResponse<List<LectureRdo>>> searchLectures(
 		@RequestBody LectureQdo lectureQdo) {
@@ -69,8 +69,8 @@ public class LectureResource implements LectureFacade {
 		);
 	}
 
-    @Override
-    @PutMapping("/{id}")
+	@Override
+	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse<Void>> updateLecture(
 		@PathVariable Integer id,
 		@Valid @RequestBody LectureUdo lectureUdo) {
@@ -81,7 +81,7 @@ public class LectureResource implements LectureFacade {
 		);
 	}
 
-    @Override
+	@Override
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse<Void>> deleteLecture(
 		@PathVariable Integer id,

@@ -34,7 +34,7 @@ public class CategoryLogic {
 		if (!userProxy.checkUserIsAdmin(createSdo.getRegistrant())) {
 			throw new AdminPermissionException(createSdo.getRegistrant());
 		}
-		
+
 		Category category = Category.create(createSdo);
 		Category saved = categoryStore.save(category);
 		return saved.getId();
@@ -56,7 +56,7 @@ public class CategoryLogic {
 		if (!userProxy.checkUserIsAdmin(updateSdo.getModifier())) {
 			throw new AdminPermissionException(updateSdo.getModifier());
 		}
-		
+
 		Category existingCategory = categoryStore.findById(id);
 		existingCategory.modify(updateSdo);
 		categoryStore.save(existingCategory);
@@ -67,7 +67,7 @@ public class CategoryLogic {
 		if (!userProxy.checkUserIsAdmin(userId)) {
 			throw new AdminPermissionException(userId);
 		}
-		
+
 		Category category = categoryStore.findById(id);
 
 		if (categoryStore.hasLectures(id)) {

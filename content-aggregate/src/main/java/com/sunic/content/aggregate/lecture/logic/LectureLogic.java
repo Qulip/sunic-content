@@ -14,10 +14,9 @@ import com.sunic.content.aggregate.lecture.store.LectureStore;
 import com.sunic.content.aggregate.proxy.UserProxy;
 import com.sunic.content.spec.common.exception.AdminPermissionException;
 import com.sunic.content.spec.lecture.entity.Lecture;
-import com.sunic.content.spec.lecture.facade.LectureFacade;
 import com.sunic.content.spec.lecture.facade.sdo.LectureCdo;
-import com.sunic.content.spec.lecture.facade.sdo.LectureRdo;
 import com.sunic.content.spec.lecture.facade.sdo.LectureQdo;
+import com.sunic.content.spec.lecture.facade.sdo.LectureRdo;
 import com.sunic.content.spec.lecture.facade.sdo.LectureUdo;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,7 @@ public class LectureLogic {
 		if (!userProxy.checkUserIsAdmin(createSdo.getRegistrant())) {
 			throw new AdminPermissionException(createSdo.getRegistrant());
 		}
-		
+
 		Lecture lecture = Lecture.create(createSdo);
 		Lecture saved = lectureStore.save(lecture);
 		return saved.getId();
@@ -72,7 +71,7 @@ public class LectureLogic {
 		if (!userProxy.checkUserIsAdmin(updateSdo.getModifier())) {
 			throw new AdminPermissionException(updateSdo.getModifier());
 		}
-		
+
 		Lecture existingLecture = lectureStore.findById(id);
 		existingLecture.modify(updateSdo);
 		lectureStore.save(existingLecture);
@@ -83,7 +82,7 @@ public class LectureLogic {
 		if (!userProxy.checkUserIsAdmin(userId)) {
 			throw new AdminPermissionException(userId);
 		}
-		
+
 		Lecture lecture = lectureStore.findById(id);
 		lecture.deactivate();
 		lectureStore.save(lecture);

@@ -54,7 +54,8 @@ public class StudentResource {
 	public ResponseEntity<ApiResponse<List<LectureStudentRdo>>> searchLectureStudents(
 		@RequestBody LectureStudentQdo lectureStudentQdo) {
 		return ResponseEntity.ok(
-			ApiResponse.success("Lecture students retrieved successfully", studentFacade.searchLectureStudents(lectureStudentQdo))
+			ApiResponse.success("Lecture students retrieved successfully",
+				studentFacade.searchLectureStudents(lectureStudentQdo))
 		);
 	}
 

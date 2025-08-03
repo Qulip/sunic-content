@@ -47,7 +47,7 @@ public class StudentLogic implements StudentFacade {
 	@Override
 	public List<LectureStudentRdo> searchLectureStudents(LectureStudentQdo lectureStudentQdo) {
 		List<LectureStudent> lectureStudents;
-		
+
 		if (lectureStudentQdo.getStudentId() != null) {
 			lectureStudents = lectureStudentStore.findByStudentId(lectureStudentQdo.getStudentId());
 		} else if (lectureStudentQdo.getLectureId() != null) {
@@ -55,7 +55,7 @@ public class StudentLogic implements StudentFacade {
 		} else {
 			lectureStudents = List.of();
 		}
-		
+
 		return lectureStudents.stream()
 			.map(this::convertToLectureStudentRdo)
 			.collect(Collectors.toList());

@@ -14,54 +14,54 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserProxy {
 
-    private final WebClient webClient;
+	private final WebClient webClient;
 
-    @Value("${user.client.base-url:http://localhost:8080}")
-    private String userServiceBaseUrl;
+	@Value("${user.client.base-url:http://localhost:8080}")
+	private String userServiceBaseUrl;
 
-    /**
-     * Check if a user exists and is valid
-     *
-     * @param userId the user ID to check
-     * @return true if user is valid, false otherwise
-     */
-    public boolean checkUser(Integer userId) {
-        try {
-            ApiResponse<Boolean> response = webClient
-                .get()
-                .uri(userServiceBaseUrl + "/user/client/check/{userId}", userId)
-                .retrieve()
-                .bodyToMono(ApiResponse.class)
-                .cast(ApiResponse.class)
-                .block();
+	/**
+	 * Check if a user exists and is valid
+	 *
+	 * @param userId the user ID to check
+	 * @return true if user is valid, false otherwise
+	 */
+	public boolean checkUser(Integer userId) {
+		try {
+			ApiResponse<Boolean> response = webClient
+				.get()
+				.uri(userServiceBaseUrl + "/user/client/check/{userId}", userId)
+				.retrieve()
+				.bodyToMono(ApiResponse.class)
+				.cast(ApiResponse.class)
+				.block();
 
-            return response != null && response.isSuccess() && Boolean.TRUE.equals(response.getData());
-        } catch (Exception e) {
-            log.error("Failed to check user validity for userId: {}", userId, e);
-            return false;
-        }
-    }
+			return response != null && response.isSuccess() && Boolean.TRUE.equals(response.getData());
+		} catch (Exception e) {
+			log.error("Failed to check user validity for userId: {}", userId, e);
+			return false;
+		}
+	}
 
-    /**
-     * Check if a user is an administrator
-     *
-     * @param userId the user ID to check
-     * @return true if user is admin, false otherwise
-     */
-    public boolean checkUserIsAdmin(Integer userId) {
-        try {
-            ApiResponse<Boolean> response = webClient
-                .get()
-                .uri(userServiceBaseUrl + "/user/client/checkAdmin/{userId}", userId)
-                .retrieve()
-                .bodyToMono(ApiResponse.class)
-                .cast(ApiResponse.class)
-                .block();
+	/**
+	 * Check if a user is an administrator
+	 *
+	 * @param userId the user ID to check
+	 * @return true if user is admin, false otherwise
+	 */
+	public boolean checkUserIsAdmin(Integer userId) {
+		try {
+			ApiResponse<Boolean> response = webClient
+				.get()
+				.uri(userServiceBaseUrl + "/user/client/checkAdmin/{userId}", userId)
+				.retrieve()
+				.bodyToMono(ApiResponse.class)
+				.cast(ApiResponse.class)
+				.block();
 
-            return response != null && response.isSuccess() && Boolean.TRUE.equals(response.getData());
-        } catch (Exception e) {
-            log.error("Failed to check admin status for userId: {}", userId, e);
-            return false;
-        }
-    }
+			return response != null && response.isSuccess() && Boolean.TRUE.equals(response.getData());
+		} catch (Exception e) {
+			log.error("Failed to check admin status for userId: {}", userId, e);
+			return false;
+		}
+	}
 }

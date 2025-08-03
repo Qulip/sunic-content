@@ -35,7 +35,7 @@ public class ContentLogic implements ContentFacade {
 		if (!userProxy.checkUserIsAdmin(contentCdo.getRegistrant())) {
 			throw new AdminPermissionException(contentCdo.getRegistrant());
 		}
-		
+
 		Content content = Content.create(contentCdo);
 		Content saved = contentStore.save(content);
 		return saved.getId().toString();
@@ -60,7 +60,7 @@ public class ContentLogic implements ContentFacade {
 		if (!userProxy.checkUserIsAdmin(updateSdo.getModifier())) {
 			throw new AdminPermissionException(updateSdo.getModifier());
 		}
-		
+
 		Content existingContent = contentStore.findById(id);
 		existingContent.modify(updateSdo);
 		contentStore.save(existingContent);
@@ -72,7 +72,7 @@ public class ContentLogic implements ContentFacade {
 		if (!userProxy.checkUserIsAdmin(userId)) {
 			throw new AdminPermissionException(userId);
 		}
-		
+
 		Content content = contentStore.findById(id);
 		content.delete();
 		contentStore.save(content);
